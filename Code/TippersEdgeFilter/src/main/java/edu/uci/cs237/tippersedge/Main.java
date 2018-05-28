@@ -1,6 +1,7 @@
 package edu.uci.cs237.tippersedge;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Application entry point.
@@ -16,7 +17,10 @@ public class Main {
         }
         String darknetDir = args[0];
         String imageFile = args[1];
-        new DarknetProcess(darknetDir, imageFile).exec();
+        List<DarknetProcess.DetectedObject> detectedObjects = new DarknetProcess(darknetDir).exec(imageFile);
+        for (DarknetProcess.DetectedObject detectedObj : detectedObjects) {
+            System.out.println(detectedObj.toString());
+        }
     }
 
 }
