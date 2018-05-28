@@ -5,6 +5,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 
 /**
  * Concrete implementation of {@link ImageSupplier} targeting a real REST endpoint.
@@ -12,6 +14,21 @@ import java.io.*;
  * @author Janus Varmarken {@literal <jvarmark@uci.edu>}.
  */
 public class CameraRestClient implements ImageSupplier {
+
+    /**
+     * Cameras require HTTP Basic authentication, so an authenticator must be provided.
+     */
+    private final Authenticator mAuthenticator = new Authenticator() {
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(CameraConfig.getCameraUsername(), CameraConfig.getCameraPassword().toCharArray());
+        }
+    };
+
+    public CameraRestClient() {
+        // Set system default authenticator.
+        Authenticator.setDefault(mAuthenticator);
+    }
 
     @Override
     public BufferedImage downloadImage(String webTargetUrl) throws IOException {

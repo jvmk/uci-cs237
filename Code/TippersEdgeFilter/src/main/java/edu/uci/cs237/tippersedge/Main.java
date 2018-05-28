@@ -1,5 +1,6 @@
 package edu.uci.cs237.tippersedge;
 
+import edu.uci.cs237.tippersedge.cameras.CameraConfig;
 import edu.uci.cs237.tippersedge.cameras.CameraRestClient;
 import edu.uci.cs237.tippersedge.cameras.MockImageSupplier;
 
@@ -37,11 +38,14 @@ public class Main {
 
         // Concrete REST client.
         CameraRestClient restClient = new CameraRestClient();
-        // Download picture from my old IT University of Copenhagen website and store it current user's documents dir.
+        // Download image from camera and store it current user's documents dir.
         // Note: HTTPS currently not supported (need to add authentication code for that in CamreRestClient).
         String userHome = System.getProperty("user.home");
         String outputFile = userHome + "/Documents/camerarestclienttest.jpg";
-        boolean success = restClient.downloadAndStoreImage("http://itu.dk/people/janv/mufc_abc.jpg", outputFile);
+        // You can download below image for instead of camera image for testing purposes if you cannot access the camera
+        // (e.g., when not on a UCI network).
+//        boolean success = restClient.downloadAndStoreImage("http://itu.dk/people/janv/mufc_abc.jpg", outputFile);
+        boolean success = restClient.downloadAndStoreImage(CameraConfig.getCameraUrl(), outputFile);
         if (success) {
             System.out.println("Successfully downloaded and stored image in " + outputFile);
         } else {
