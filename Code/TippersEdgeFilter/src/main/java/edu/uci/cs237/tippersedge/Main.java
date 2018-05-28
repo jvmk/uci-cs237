@@ -1,5 +1,6 @@
 package edu.uci.cs237.tippersedge;
 
+import edu.uci.cs237.tippersedge.cameras.CameraRestClient;
 import edu.uci.cs237.tippersedge.cameras.MockImageSupplier;
 
 import java.awt.image.BufferedImage;
@@ -24,14 +25,27 @@ public class Main {
         // =============================================================================================================
         // Insert code for testing/debugging functionality here...
 
-        // Mock REST service.
-        MockImageSupplier imgSupplier = new MockImageSupplier();
-        BufferedImage img = imgSupplier.downloadImage("ignored by mock implementation");
-
         // Perform object detection on imageFile
         List<DarknetProcess.DetectedObject> detectedObjects = new DarknetProcess(darknetDir).exec(imageFile);
         for (DarknetProcess.DetectedObject detectedObj : detectedObjects) {
             System.out.println(detectedObj.toString());
+        }
+
+        // Mock REST client.
+        MockImageSupplier imgSupplier = new MockImageSupplier();
+        BufferedImage img = imgSupplier.downloadImage("ignored by mock implementation");
+
+        // Concrete REST client.
+        CameraRestClient restClient = new CameraRestClient();
+        // Download picture from my old IT University of Copenhagen website and store it current user's documents dir.
+        // Note: HTTPS currently not supported (need to add authentication code for that in CamreRestClient).
+        String userHome = System.getProperty("user.home");
+        String outputFile = userHome + "/Documents/camerarestclienttest.jpg";
+        boolean success = restClient.downloadAndStoreImage("http://itu.dk/people/janv/mufc_abc.jpg", outputFile);
+        if (success) {
+            System.out.println("Successfully downloaded and stored image in " + outputFile);
+        } else {
+            System.out.println("ERROR: image download failed, or failed to store downloaded image on disk");
         }
 
         // =============================================================================================================
