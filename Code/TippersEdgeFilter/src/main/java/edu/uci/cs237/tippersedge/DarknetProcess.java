@@ -10,7 +10,8 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Utility class for invoking the Darknet command line tool.
+ * Utility class for invoking the Darknet command line tool
+ * (see <a href="https://pjreddie.com/darknet/yolo/">https://pjreddie.com/darknet/yolo/</a>).
  * Darknet performs (real-time) object detection in images.
  *
  * @author Janus Varmarken {@literal <jvarmark@uci.edu>}
