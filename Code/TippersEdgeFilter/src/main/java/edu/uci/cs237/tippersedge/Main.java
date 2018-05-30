@@ -2,7 +2,9 @@ package edu.uci.cs237.tippersedge;
 
 import edu.uci.cs237.tippersedge.cameras.CameraConfig;
 import edu.uci.cs237.tippersedge.cameras.CameraRestClient;
+import edu.uci.cs237.tippersedge.cameras.CameraSampleHandler;
 import edu.uci.cs237.tippersedge.cameras.MockImageSupplier;
+import edu.uci.cs237.tippersedge.sensoria.MockImageUploader;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -26,6 +28,15 @@ public class Main {
         // =============================================================================================================
         // Insert code for testing/debugging functionality here...
 
+        CameraSampleHandler cameraSampleHandler = new CameraSampleHandler(new CameraRestClient(), 300, 10_000, darknetDir, new MockImageUploader());
+        cameraSampleHandler.startPeriodicSampling();
+        Thread.sleep(15 * 20_000);
+        // Terminate sampling and wait (block) for 30 seconds for tasks to terminate.
+        // TODO this seems to ignore the fact that Darknet is still running
+        cameraSampleHandler.stopPeriodicSampling(true, 30_000);
+
+
+        /*
         // Perform object detection on imageFile
         List<DarknetProcess.DetectedObject> detectedObjects = new DarknetProcess(darknetDir).exec(imageFile);
         for (DarknetProcess.DetectedObject detectedObj : detectedObjects) {
@@ -51,6 +62,7 @@ public class Main {
         } else {
             System.out.println("ERROR: image download failed, or failed to store downloaded image on disk");
         }
+        */
 
         // =============================================================================================================
     }

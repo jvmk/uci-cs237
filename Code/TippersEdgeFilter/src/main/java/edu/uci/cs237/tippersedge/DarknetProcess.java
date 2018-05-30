@@ -132,6 +132,20 @@ public class DarknetProcess {
         public String toString() {
             return String.format("[ DetectedObject of type '%s' with confidence '%d' ]", mObjectName, mConfidence);
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof DetectedObject)) {
+                return false;
+            }
+            DetectedObject other = (DetectedObject) obj;
+            return other.mObjectName.equals(this.mObjectName) && other.mConfidence == other.mConfidence;
+        }
     }
+
+    // TODO should also overwrite hashCode according to overwrite of equals.
 
 }
