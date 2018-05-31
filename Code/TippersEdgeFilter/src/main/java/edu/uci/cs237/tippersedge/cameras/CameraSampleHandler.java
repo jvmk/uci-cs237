@@ -84,7 +84,7 @@ public class CameraSampleHandler extends AbstractPeriodicSampleHandler<String> {
    	     		if (oldScene.get(i).equals(newScene.get(i)))
 				matchedObjects++;
 	    }
-	    boolean identical = matchedObjects == oldScene.size() && i == newScene.size(); 
+	    boolean identical = matchedObjects == oldScene.size(); 
   
             if (ENABLE_DEBUG_OUTPUT) {
                 if (identical) {
