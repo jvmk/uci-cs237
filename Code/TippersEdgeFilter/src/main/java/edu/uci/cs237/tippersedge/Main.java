@@ -4,6 +4,7 @@ import edu.uci.cs237.tippersedge.cameras.CameraConfig;
 import edu.uci.cs237.tippersedge.cameras.CameraRestClient;
 import edu.uci.cs237.tippersedge.cameras.CameraSampleHandler;
 import edu.uci.cs237.tippersedge.cameras.MockImageSupplier;
+import edu.uci.cs237.tippersedge.darknet.DarknetConfig;
 import edu.uci.cs237.tippersedge.sensoria.MockImageUploader;
 
 import java.awt.image.BufferedImage;
@@ -18,17 +19,22 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        if (args.length < 1) {
-            System.out.println(String.format("usage: java %s darknetDir [imageFile]", Main.class.getName()));
-            return;
-        }
-        String darknetDir = args[0];
-        String imageFile = args.length > 1 ? args[1] : Main.class.getResource("/img/eagle.jpg").getFile();
+//        if (args.length < 1) {
+//            System.out.println(String.format("usage: java %s darknetDir [imageFile]", Main.class.getName()));
+//            return;
+//        }
+//        String darknetDir = args[0];
+//        String imageFile = args.length > 1 ? args[1] : Main.class.getResource("/img/eagle.jpg").getFile();
 
         // =============================================================================================================
         // Insert code for testing/debugging functionality here...
 
-        CameraSampleHandler cameraSampleHandler = new CameraSampleHandler(new CameraRestClient(), 300, 10_000, darknetDir, new MockImageUploader());
+        CameraSampleHandler cameraSampleHandler = new CameraSampleHandler(new CameraRestClient(),
+                300,
+                10_000,
+                DarknetConfig.getDarknetDirectory(),
+                new MockImageUploader()
+        );
         cameraSampleHandler.startPeriodicSampling();
         Thread.sleep(15 * 20_000);
         // Terminate sampling and wait (block) for 30 seconds for tasks to terminate.

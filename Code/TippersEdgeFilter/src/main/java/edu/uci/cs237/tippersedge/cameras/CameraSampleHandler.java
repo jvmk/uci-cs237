@@ -1,7 +1,7 @@
 package edu.uci.cs237.tippersedge.cameras;
 
 import edu.uci.cs237.tippersedge.AbstractPeriodicSampleHandler;
-import edu.uci.cs237.tippersedge.DarknetProcess;
+import edu.uci.cs237.tippersedge.darknet.DarknetProcess;
 import edu.uci.cs237.tippersedge.sensoria.ImageUploader;
 
 import java.io.IOException;
