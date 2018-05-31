@@ -79,15 +79,13 @@ public class CameraSampleHandler extends AbstractPeriodicSampleHandler<String> {
                 return true;
             }
             int matchedObjects = 0;
-            for (DarknetProcess.DetectedObject oldSceneObj : oldScene) {
-                for (DarknetProcess.DetectedObject newSceneObj : newScene) {
-                    if(newSceneObj.equals(oldSceneObj)) {
-                        matchedObjects++;
-                        break;
-                    }
-                }
-            }
-            boolean identical = matchedObjects == oldScene.size();
+
+	    for (int i  = 0; i < oldScene.size(); i++) {
+   	     		if (oldScene.get(i).equals(newScene.get(i)))
+				matchedObjects++;
+	    }
+	    boolean identical = matchedObjects == oldScene.size() && i == newScene.size(); 
+  
             if (ENABLE_DEBUG_OUTPUT) {
                 if (identical) {
                     System.out.println(String.format("[ Previous img and new img identical; disapproving upload of img '%s' ]", sample));
