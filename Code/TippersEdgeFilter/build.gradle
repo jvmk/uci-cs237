@@ -2,6 +2,9 @@ group 'edu.uci.cs237.tippersedge'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'edu.uci.cs237.tippersedge.Main'
 
 sourceCompatibility = 1.8
 
