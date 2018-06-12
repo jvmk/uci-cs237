@@ -1,15 +1,11 @@
 package edu.uci.cs237.tippersedge;
 
-import edu.uci.cs237.tippersedge.cameras.CameraConfig;
 import edu.uci.cs237.tippersedge.cameras.CameraRestClient;
 import edu.uci.cs237.tippersedge.cameras.CameraSampleHandler;
-import edu.uci.cs237.tippersedge.cameras.MockImageSupplier;
 import edu.uci.cs237.tippersedge.darknet.DarknetConfig;
 import edu.uci.cs237.tippersedge.sensoria.MockImageUploader;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Application entry point.
@@ -28,7 +24,6 @@ public class Main {
 
         // =============================================================================================================
         // Insert code for testing/debugging functionality here...
-
         CameraSampleHandler cameraSampleHandler = new CameraSampleHandler(new CameraRestClient(),
                 300,
                 10_000,
