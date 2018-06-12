@@ -3,9 +3,15 @@ package edu.uci.cs237.tippersedge;
 import edu.uci.cs237.tippersedge.cameras.CameraRestClient;
 import edu.uci.cs237.tippersedge.cameras.CameraSampleHandler;
 import edu.uci.cs237.tippersedge.darknet.DarknetConfig;
+import edu.uci.cs237.tippersedge.darknet.DarknetProcess;
 import edu.uci.cs237.tippersedge.sensoria.MockImageUploader;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
+import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Application entry point.
@@ -21,6 +27,10 @@ public class Main {
 //        }
 //        String darknetDir = args[0];
 //        String imageFile = args.length > 1 ? args[1] : Main.class.getResource("/img/eagle.jpg").getFile();
+
+
+//        benchmarkDarknet("/Users/varmarken/temp/tippers/sample_data", 100);
+
 
         // =============================================================================================================
         // Insert code for testing/debugging functionality here...
@@ -67,5 +77,50 @@ public class Main {
 
         // =============================================================================================================
     }
+
+    /**
+     * Benchmark darknet by computing the average time it takes to execute darknet on each .jpg image in the given directory.
+     * @param imgDir The directory where the files to be used in the benchmark reside.
+     * @param cap A maximum number of images to be included in the benchmark.
+     */
+    static void benchmarkDarknet(String imgDir, int cap) throws IOException, InterruptedException {
+        DarknetProcess dp = new DarknetProcess(DarknetConfig.getDarknetDirectory());
+        File dir = new File(imgDir);
+        File[] fileList = dir.listFiles();
+        List<String> images = new ArrayList<>();
+        for(File f : fileList) {
+            if (f.isFile() && f.getName().endsWith(".jpg")) {
+                images.add(f.getAbsolutePath());
+            }
+            if (images.size() >= cap) {
+                break;
+            }
+        }
+        List<Long> executionTimes = new ArrayList<>();
+        int count = 0;
+        for (String img : images) {
+            count++;
+            long start = System.currentTimeMillis();
+            List<DarknetProcess.DetectedObject> objects = dp.exec(img);
+            long end = System.currentTimeMillis();
+            long execTimeMillis = end - start;
+            objects.stream().forEach(o -> o.toString());
+            System.out.println(String.format("Execution time for img %d out of %d was %d milliseconds", count, images.size(), execTimeMillis));
+            System.out.println("=================================================================");
+            executionTimes.add(execTimeMillis);
+        }
+        DescriptiveStatistics stats = new DescriptiveStatistics();
+        for (Long execTime : executionTimes) {
+            // Ugh, may loose precision when converting from long to double
+            stats.addValue(execTime);
+        }
+        System.out.println("Average execution time: " + stats.getMean());
+        System.out.println("Standard deviation: " + stats.getStandardDeviation());
+        System.out.println("Variance: " + stats.getVariance());
+
+        // double avgExecTimeMillis = executionTimes.stream().reduce((l1, l2) -> l1 + l2).get() / new Double(count);
+    }
+
+
 
 }

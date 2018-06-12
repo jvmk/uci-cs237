@@ -56,7 +56,7 @@ public class DarknetProcess {
             while ((line = reader.readLine()) != null) {
                 // Note: Darknet seems to print its progress information to std.err.
                 // However, "actual" errors will also show up in this output, e.g., if cfg/yolov3.cfg file is missing.
-                System.err.println(line);
+//                System.err.println(line);
             }
         }
         List<DetectedObject> detectedObjects = new ArrayList<>();
