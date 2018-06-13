@@ -9,8 +9,8 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,11 +29,20 @@ public class Main {
 //        String imageFile = args.length > 1 ? args[1] : Main.class.getResource("/img/eagle.jpg").getFile();
 
 
-//        benchmarkDarknet("/Users/varmarken/temp/tippers/sample_data", 100);
+
 
 
         // =============================================================================================================
         // Insert code for testing/debugging functionality here...
+
+
+        testInclusionLogic("/Users/varmarken/temp/tippers/sample_data/test_set");
+
+        /*
+        benchmarkDarknet("/Users/varmarken/temp/tippers/sample_data", 100);
+        */
+
+        /*
         CameraSampleHandler cameraSampleHandler = new CameraSampleHandler(new CameraRestClient(),
                 300,
                 10_000,
@@ -45,7 +54,7 @@ public class Main {
         // Terminate sampling and wait (block) for 30 seconds for tasks to terminate.
         // TODO this seems to ignore the fact that Darknet is still running
         cameraSampleHandler.stopPeriodicSampling(true, 30_000);
-
+        */
 
         /*
         // Perform object detection on imageFile
@@ -76,6 +85,7 @@ public class Main {
         */
 
         // =============================================================================================================
+
     }
 
     /**
@@ -85,17 +95,7 @@ public class Main {
      */
     static void benchmarkDarknet(String imgDir, int cap) throws IOException, InterruptedException {
         DarknetProcess dp = new DarknetProcess(DarknetConfig.getDarknetDirectory());
-        File dir = new File(imgDir);
-        File[] fileList = dir.listFiles();
-        List<String> images = new ArrayList<>();
-        for(File f : fileList) {
-            if (f.isFile() && f.getName().endsWith(".jpg")) {
-                images.add(f.getAbsolutePath());
-            }
-            if (images.size() >= cap) {
-                break;
-            }
-        }
+        List<String> images = getListOfJpgImagesInDir(imgDir, cap);
         List<Long> executionTimes = new ArrayList<>();
         int count = 0;
         for (String img : images) {
@@ -121,6 +121,41 @@ public class Main {
         // double avgExecTimeMillis = executionTimes.stream().reduce((l1, l2) -> l1 + l2).get() / new Double(count);
     }
 
+    static void testInclusionLogic(String imgDir) {
+        final List<String> images = getListOfJpgImagesInDir(imgDir, Integer.MAX_VALUE);
+        Collections.sort(images);
+        // Overwrite the standard rest client to just return images from a local directory.
+        CameraRestClient crc = new CameraRestClient() {
 
+            private int count = 0;
+
+            @Override
+            public String sample() {
+                return images.get(count++);
+            }
+
+        };
+        CameraSampleHandler csh = new CameraSampleHandler(crc, images.size() / 2, 1_000_000_000, DarknetConfig.getDarknetDirectory(), new MockImageUploader());
+        int i = 0;
+        while (i < images.size()) {
+            csh.sampleAndUpload();
+            i++;
+        }
+    }
+
+    private static List<String> getListOfJpgImagesInDir(String imgDir, int cap) {
+        File dir = new File(imgDir);
+        File[] fileList = dir.listFiles();
+        List<String> images = new ArrayList<>();
+        for(File f : fileList) {
+            if (f.isFile() && f.getName().endsWith(".jpg")) {
+                images.add(f.getAbsolutePath());
+            }
+            if (images.size() >= cap) {
+                break;
+            }
+        }
+        return images;
+    }
 
 }
