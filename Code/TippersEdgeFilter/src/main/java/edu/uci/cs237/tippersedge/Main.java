@@ -35,17 +35,18 @@ public class Main {
         // =============================================================================================================
         // Insert code for testing/debugging functionality here...
 
-
+        /*
         testInclusionLogic("/Users/varmarken/temp/tippers/sample_data/test_set");
+        */
 
         /*
         benchmarkDarknet("/Users/varmarken/temp/tippers/sample_data", 100);
         */
 
-        /*
+
         CameraSampleHandler cameraSampleHandler = new CameraSampleHandler(new CameraRestClient(),
                 300,
-                10_000,
+                30_000,
                 DarknetConfig.getDarknetDirectory(),
                 new MockImageUploader()
         );
@@ -54,7 +55,7 @@ public class Main {
         // Terminate sampling and wait (block) for 30 seconds for tasks to terminate.
         // TODO this seems to ignore the fact that Darknet is still running
         cameraSampleHandler.stopPeriodicSampling(true, 30_000);
-        */
+
 
         /*
         // Perform object detection on imageFile
