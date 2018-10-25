@@ -1,4 +1,4 @@
-# CS237-S2018-ClassProject
+# uci-cs237
 
 This repository contains the code for the "Edge Computing in TIPPERS" project. The project was carried out as a class project for UCI CS237 S2018. The goal of the project is to reduce the strain on the TIPPERS backend by filtering redundant sensor samples at a computational device at the edge of the network (i.e., in proximity of the sensor). The provided code is a generic framework that allows developers to easily implement sensor sample filtering for any arbitrary sensor. We include a sample implementation for surveillance cameras which discards an image if it is logically identical to the previous image (i.e., if the same set of objects are present, in the same order, in both images).
 
